@@ -20,12 +20,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/dcposch/blakejs.git"
+		"url": "git+https://github.com/prokopschield/blakets.git"
 	},
 	"bugs": {
-		"url": "https://github.com/dcposch/blakejs/issues"
+		"url": "https://github.com/prokopschield/blakets/issues"
 	},
-	"homepage": "https://github.com/dcposch/blakejs#readme",
+	"homepage": "https://github.com/prokopschield/blakets#readme",
 	"keywords": [],
 	"dependencies": {
 		"doge-json": "*"

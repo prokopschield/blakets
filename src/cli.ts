@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { blake2bHex, blake2sHex } from ".";
+import { blake2bHex, blake2sHex } from '.';
 
 const input = process.argv.slice(2).join(' ');
 

@@ -1,4 +1,4 @@
-import { encode } from 'doge-json/lib/encode';
+import { encode } from 'doge-json/lib/normalize-and-encode';
 
 const ERROR_MSG_INPUT = 'Input must be an string, Buffer or Uint8Array';
 

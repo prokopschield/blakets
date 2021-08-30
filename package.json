@@ -1,7 +1,7 @@
 {
 	"name": "blakets",
 	"description": "Pure TypeScript implementation of the BLAKE2b and BLAKE2s hash functions",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"main": "lib/index.js",
 	"bin": {
 		"blake": "lib/cli.js",
@@ -28,7 +28,7 @@
 	"homepage": "https://github.com/prokopschield/blakets#readme",
 	"keywords": [],
 	"dependencies": {
-		"doge-json": "^1.1.1"
+		"doge-json": "^1.1.2"
 	},
 	"directories": {
 		"lib": "lib",

@@ -71,10 +71,10 @@ defined@^1.0.0:
   resolved "https://registry.yarnpkg.com/defined/-/defined-1.0.0.tgz#c98d9bcef75674188e110969151199e39b1fa693"
   integrity sha1-yY2bzvdWdBiOEQlpFRGZ45sfppM=
 
-doge-json@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/doge-json/-/doge-json-1.2.3.tgz#193c5052261bfd9de0492c839e36cc89e514733f"
-  integrity sha512-cHcfx5d8Nx/7X6KCSCCrNruxIxARrws05wGbdSSe5g0df3Bwycia/fDHx3pS/17xTpo5ztGQqkq0AFwCv/VmAg==
+doge-json@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/doge-json/-/doge-json-1.2.7.tgz#5c4a01b714ad75fdcf89b861a51dc8a99c6ce872"
+  integrity sha512-B/JUEFJhx0vPM86ukrws1W+UMzmwwVJ92EecnK1SsTTr5eD4IBuZkhOdGbVt45IndmcQ8/O2PZmUROQdul9aUg==
 
 dotignore@^0.1.2:
   version "0.1.2"

@@ -1,8 +1,30 @@
-import { encode } from 'doge-json/lib/normalize-and-encode';
+export function normalizeObject(
+	input: object,
+	stack: Array<typeof input> = []
+): Uint8Array {
+	const new_stack = [...stack, input];
+	if (input instanceof Uint8Array) {
+		return input;
+	} else if (input instanceof Array) {
+		return Buffer.concat(
+			input
+				.filter((a) => !new_stack.includes(a))
+				.map((a) => normalizeInput(a, new_stack))
+				.map(Buffer.from)
+		);
+	} else if (input instanceof Set) {
+		return normalizeObject([...input], new_stack);
+	} else if (input instanceof Map) {
+		return normalizeObject(input.entries(), new_stack);
+	} else {
+		return normalizeObject(Object.entries(input), new_stack);
+	}
+}
 
 // For convenience, let people hash a string, not just a Uint8Array
 export function normalizeInput(
-	input: string | { buffer: ArrayBuffer }
+	input: string | { buffer: ArrayBuffer },
+	stack?: Array<object>
 ): Uint8Array {
 	if (typeof input !== 'object') {
 		return new Uint8Array(Buffer.from(`${input}`));
@@ -10,7 +32,7 @@ export function normalizeInput(
 		if (input instanceof Uint8Array) return input;
 		else return new Uint8Array(input.buffer);
 	} else {
-		return normalizeInput(encode(input));
+		return normalizeObject(input, stack);
 	}
 }
 
@@ -73,9 +95,12 @@ export function testSpeed(hashFn: Function, N: number, M: number) {
 		var hashMs = new Date().getTime();
 		var ms = hashMs - startMs;
 		startMs = hashMs;
-		console.log('Hashed in ' + ms + 'ms: ' + hashHex.substring(0, 20) + '...');
 		console.log(
-			Math.round((N / (1 << 20) / (ms / 1000)) * 100) / 100 + ' MB PER SECOND'
+			'Hashed in ' + ms + 'ms: ' + hashHex.substring(0, 20) + '...'
+		);
+		console.log(
+			Math.round((N / (1 << 20) / (ms / 1000)) * 100) / 100 +
+				' MB PER SECOND'
 		);
 	}
 }

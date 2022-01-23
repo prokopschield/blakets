@@ -2,7 +2,8 @@
 // Adapted from the reference implementation in RFC7693
 // Ported to Javascript by DC - https://github.com/dcposch
 
-import * as util from './util';
+import { normalizeInput, toHex } from './util';
+import type { Hashable } from './util';
 
 /**
  * Little-endian byte access
@@ -194,18 +195,12 @@ export function blake2sFinal(ctx: Blake2sCTX) {
  * @param outlen optional output length in bytes, defaults to 64
  * @returns an n-byte Uint8Array
  */
-export function blake2s(
-	input: string | Uint8Array,
-	key?: Uint8Array,
-	outlen?: number
-) {
+export function blake2s(input: Hashable, key?: Uint8Array, outlen?: number) {
 	// preprocess inputs
 	outlen = outlen || 32;
-	input = util.normalizeInput(input);
-
 	// do the math
 	var ctx = blake2sInit(outlen, key);
-	blake2sUpdate(ctx, input);
+	blake2sUpdate(ctx, normalizeInput(input));
 	return blake2sFinal(ctx);
 }
 
@@ -216,13 +211,9 @@ export function blake2s(
  * @param outlen optional output length in bytes, defaults to 64
  * @returns
  */
-export function blake2sHex(
-	input: string | Uint8Array,
-	key?: Uint8Array,
-	outlen?: number
-) {
+export function blake2sHex(input: Hashable, key?: Uint8Array, outlen?: number) {
 	var output = blake2s(input, key, outlen);
-	return util.toHex(output);
+	return toHex(output);
 }
 
 /**
@@ -233,7 +224,7 @@ export function blake2sHex(
  * @returns the hash, as a bigint
  */
 export function blake2sBigInt(
-	input: string | Uint8Array,
+	input: Hashable,
 	key?: Uint8Array,
 	outlen?: number
 ) {

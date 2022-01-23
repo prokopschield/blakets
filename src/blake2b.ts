@@ -3,7 +3,8 @@
 // Ported to Javascript by DC - https://github.com/dcposch
 // Type annotations added by Prokop Schield - https://github.com/prokopschield
 
-import * as util from './util';
+import { normalizeInput, toHex } from './util';
+import type { Hashable } from './util';
 
 /**
  * 64-bit unsigned addition
@@ -286,17 +287,16 @@ export function blake2bFinal(ctx: Blake2bCTX): Uint8Array {
  * @returns an n-byte Uint8Array
  */
 export function blake2b(
-	input: string | Uint8Array,
+	input: Hashable,
 	key?: Uint8Array,
 	outlen: number = 64
 ) {
 	// preprocess inputs
 	outlen = outlen || 64;
-	input = util.normalizeInput(input);
 
 	// do the math
 	var ctx = blake2bInit(outlen, key);
-	blake2bUpdate(ctx, input);
+	blake2bUpdate(ctx, normalizeInput(input));
 	return blake2bFinal(ctx);
 }
 
@@ -309,12 +309,12 @@ export function blake2b(
  * @returns an n-byte hash in hex, all lowercase
  */
 export function blake2bHex(
-	input: string | Uint8Array,
+	input: Hashable,
 	key?: Uint8Array,
 	outlen: number = 64
 ) {
 	var output = blake2b(input, key, outlen);
-	return util.toHex(output);
+	return toHex(output);
 }
 
 /**
@@ -325,7 +325,7 @@ export function blake2bHex(
  * @returns the hash, as a bigint
  */
 export function blake2bBigInt(
-	input: string | Uint8Array,
+	input: Hashable,
 	key?: Uint8Array,
 	outlen?: number
 ) {

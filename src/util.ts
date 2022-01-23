@@ -1,38 +1,57 @@
-export function normalizeObject(
-	input: object,
-	stack: Array<typeof input> = []
-): Uint8Array {
-	const new_stack = [...stack, input];
-	if (input instanceof Uint8Array) {
-		return input;
-	} else if (input instanceof Array) {
-		return Buffer.concat(
-			input
-				.filter((a) => !new_stack.includes(a))
-				.map((a) => normalizeInput(a, new_stack))
-				.map(Buffer.from)
-		);
-	} else if (input instanceof Set) {
-		return normalizeObject([...input], new_stack);
-	} else if (input instanceof Map) {
-		return normalizeObject(input.entries(), new_stack);
-	} else {
-		return normalizeObject(Object.entries(input), new_stack);
-	}
-}
+type TypedArray =
+	| Int8Array
+	| Uint8Array
+	| Uint8ClampedArray
+	| Int16Array
+	| Uint16Array
+	| Int32Array
+	| Uint32Array
+	| Float32Array
+	| Float64Array
+	| BigInt64Array
+	| BigUint64Array
+	| { buffer: ArrayBuffer };
 
-// For convenience, let people hash a string, not just a Uint8Array
+export type Hashable =
+	| string
+	| Buffer
+	| TypedArray
+	| Set<Hashable>
+	| Map<Hashable, Hashable>
+	| Hashable[];
+
 export function normalizeInput(
-	input: string | { buffer: ArrayBuffer },
-	stack?: Array<object>
+	input: Hashable,
+	stack?: Hashable[],
+	decorator?: string
 ): Uint8Array {
 	if (typeof input !== 'object') {
-		return new Uint8Array(Buffer.from(`${input}`));
-	} else if ('buffer' in input) {
-		if (input instanceof Uint8Array) return input;
-		else return new Uint8Array(input.buffer);
+		return Buffer.from(`${input?.toString?.() || input}`);
+	} else if (input instanceof Uint8Array) {
+		return input;
+	} else if ('buffer' in input && input.buffer instanceof ArrayBuffer) {
+		return new Uint8Array(input.buffer);
 	} else {
-		return normalizeObject(input, stack);
+		const new_stack = stack ? [...stack, input] : [input];
+		if (input instanceof Array) {
+			const ar = Array<Uint8Array | string>(
+				`(${decorator || input.length})[`
+			);
+			for (let i = 0; i < input.length; ++i) {
+				if (!new_stack.includes(input[i])) {
+					i && ar.push(',');
+					ar.push(normalizeInput(input[i]));
+				}
+			}
+			ar.push(']');
+			return Buffer.concat(ar.map(Buffer.from));
+		} else if (input instanceof Set) {
+			return normalizeInput([...input], new_stack, 'SET');
+		} else if (input instanceof Map) {
+			return normalizeInput([...input.entries()], new_stack, 'MAP');
+		} else {
+			return normalizeInput(Object.entries(input), new_stack, 'OBJ');
+		}
 	}
 }
 

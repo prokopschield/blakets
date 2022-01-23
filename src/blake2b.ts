@@ -316,3 +316,26 @@ export function blake2bHex(
 	var output = blake2b(input, key, outlen);
 	return util.toHex(output);
 }
+
+/**
+ *
+ * @param input the input bytes, as a string, Buffer, or Uint8Array
+ * @param key optional key Uint8Array, up to 32 bytes
+ * @param outlen optional output length in bytes, defaults to 64
+ * @returns the hash, as a bigint
+ */
+export function blake2bBigInt(
+	input: string | Uint8Array,
+	key?: Uint8Array,
+	outlen?: number
+) {
+	var sixty_four = BigInt(64);
+	var output = blake2b(input, key, outlen);
+	var bigIntArray = new BigUint64Array(output.buffer);
+	var res = BigInt(0);
+	for (const n of bigIntArray) {
+		res <<= sixty_four;
+		res += n;
+	}
+	return res;
+}

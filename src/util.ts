@@ -13,12 +13,16 @@ type TypedArray =
 	| { buffer: ArrayBuffer };
 
 export type Hashable =
+	| keyof any
 	| string
 	| Buffer
 	| TypedArray
 	| Set<Hashable>
 	| Map<Hashable, Hashable>
-	| Hashable[];
+	| Hashable[]
+	| {
+			[index: keyof any]: Hashable;
+	  };
 
 export function normalizeInput(
 	input: Hashable,
@@ -26,7 +30,7 @@ export function normalizeInput(
 	decorator?: string
 ): Uint8Array {
 	if (typeof input !== 'object') {
-		return Buffer.from(`${input?.toString?.() || input}`);
+		return Buffer.from(String(input?.toString?.() || input));
 	} else if (input instanceof Uint8Array) {
 		return input;
 	} else if ('buffer' in input && input.buffer instanceof ArrayBuffer) {

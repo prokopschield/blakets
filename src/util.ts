@@ -21,7 +21,7 @@ export type Hashable =
 	| Map<Hashable, Hashable>
 	| Hashable[]
 	| {
-			[index: keyof any]: Hashable;
+			[index: string | number]: Hashable;
 	  };
 
 export function normalizeInput(

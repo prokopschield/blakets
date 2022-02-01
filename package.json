@@ -1,7 +1,7 @@
 {
 	"name": "blakets",
 	"description": "Pure TypeScript implementation of the BLAKE2b and BLAKE2s hash functions",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"main": "lib/index.js",
 	"bin": {
 		"blake": "lib/cli.js",

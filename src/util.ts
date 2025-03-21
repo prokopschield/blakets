@@ -48,7 +48,15 @@ export function normalizeInput(
 				}
 			}
 			ar.push(']');
-			return Buffer.concat(ar.map(Buffer.from));
+			return Buffer.concat(
+				ar.map((item) => {
+					if (typeof item === 'string') {
+						return Buffer.from(item);
+					} else {
+						return item;
+					}
+				})
+			);
 		} else if (input instanceof Set) {
 			return normalizeInput([...input], new_stack, 'SET');
 		} else if (input instanceof Map) {

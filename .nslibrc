@@ -1,0 +1,2 @@
+unlink_by_default=false
+generated_test_vectors.txt=keep
